@@ -11,6 +11,7 @@ import Diets from './components/Diet/Diets.vue'
 import Stats from './components/Stats/Stats.vue'
 import ValidateIngredient from './components/Ingredient/ValidateIngredient.vue'
 import AddIngredientTab from './components/Ingredient/AddIngredientTab.vue'
+import EquivalencesTab from './components/Ingredient/EquivalencesTab.vue'
 import AddRecipe from './components/Recipe/AddRecipe.vue'
 import FanarRecipe from './components/Recipe/FanarRecipe.vue'
 import Login from './components/Login.vue'
@@ -71,6 +72,7 @@ const routes = [
   { path:'/stats', name:'Stats', component:  Stats, props: true, meta: {requiresAuth: true}},
   { path: '/exportData',  name:'Export Data', component: ExportData, props: true, meta: {requiresAuth: true}},
   { path: '/validateRecipe', name:'Validate Recipe', component: ValidateRecipe, props: true},
+  { path: '/equivalences', name:'Equivalent Ingredients', component: EquivalencesTab, props: true},
   { path: '/addRecipe', name:'Add Recipe', component: AddRecipe, props: true},
   { path: '/fanarRecipe', name:'Sneaky Fananço', component: FanarRecipe, props: true},
   { path: '/addIngredient', name:'Add Ingredient', component: AddIngredientTab, props: true},

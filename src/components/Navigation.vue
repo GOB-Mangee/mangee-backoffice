@@ -70,7 +70,13 @@ import { SidebarMenu } from 'vue-sidebar-menu'
                           href: '/addIngredient',
                           title: 'Add Ingredient',
                           icon: 'fa fa-plus',
-                      }
+                      },
+                      {
+                          href: '/equivalences',
+                          title: 'Equivalent Ingredients',
+                          icon: 'fa fa-table',
+                      },
+
                   ]
               },
               {
