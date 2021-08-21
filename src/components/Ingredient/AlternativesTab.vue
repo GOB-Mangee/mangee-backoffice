@@ -52,9 +52,6 @@
 				:per-page="perPage"
 				:filter="filter"
 				:filterIncludedFields="filterOn"
-				:sort-by.sync="sortBy"
-				:sort-desc.sync="sortDesc"
-				:sort-direction="sortDirection"
 				:default-sort="['id', 'asc']"
 				@filtered="onFiltered"
 				@row-clicked="editIngredient"
@@ -72,13 +69,13 @@
 <script>
 
 import axios from 'axios'
-import SetEquivalences from './SetEquivalences.vue'
+import SetAlternatives from './SetAlternatives.vue'
 
 
 export default {
-    name: "EquivalencesTab",
+    name: "AlternativesTab",
     components: {
-        SetEquivalences
+        SetAlternatives
     },
     data(){
         return {
@@ -90,32 +87,24 @@ export default {
 			fields: [
 				{ key: 'id', label: 'Ingredient Id', sortable: true, class: 'text-center' },
 				{ key: 'name', label: 'Name', sortable: true, class: 'text-left' },
-				{ key: 'equivalences', label: 'Equivalences', sortable: false, class: 'text-left', formatter: 'display_equivalences'},
+				{ key: 'alternatives', label: 'Alternatives', sortable: false, class: 'text-left', formatter: 'display_alternatives'},
 				{ key: 'actions', label: 'Actions' }
 			],
 			currentPage: 1,
 			perPage: 10,
 			pageOptions: [5, 10, 15],
-			sortBy: 'id',
-			sortDesc: false,
-			sortDirection: 'asc',
 			filter: null,
 			filterOn: ['id', 'name']
         }
     },
 	created (){
-		axios.get(this.deploy_to + 'backoffice/ingredients/',{headers: {
+		axios.get(this.deploy_to + 'backoffice/ingredients-alternatives/',{headers: {
 				'Authorization': `${this.$store.getters.getTokenToSend}`
 			}})
 			.then(response => {
 				this.ingredients = response.data
 				this.totalRows = this.ingredients.length
-				// TODO REMOVE
-				// HARDCODED TEST DATA
-				this.ingredients.forEach(i => {
-					i.equivalences = [{id: -1, name: "melao"}, {id: -2, name: "vinho"}, {id: -3, name: "mel"}]
-				})
-				console.log("fetched ingredients")
+				console.log("fetched ingredients with alternatives")
 			})
 			.catch(error => {
 				this.showErr(error)
@@ -135,12 +124,12 @@ export default {
 			this.success = msg
 			setTimeout(() => this.success = null, 3000);
 		},
-		display_equivalences(ingredients){
+		display_alternatives(ingredients){
 			return ingredients.map(i => i.name).join(", ");
 		},
 		editIngredient(ingredient, index) {
 			this.$modal.show(
-				SetEquivalences,
+				SetAlternatives,
 				{initialIngredient: ingredient, ingredients: this.ingredients},
 				{ width: "700", height: "auto", adaptive: true, scrollable: true},
 				{ 'before-close': this.ingredientUpdated }
@@ -152,10 +141,10 @@ export default {
 				return
 			}
 			let ingredient = eventParams[0]
-			let newEquivalences = eventParams[1]
+			let newAlternatives = eventParams[1]
 			for(var i = 0; i < this.ingredients.length; i++){
 				if(this.ingredients[i].id == ingredient.id){
-					this.ingredients[i].equivalences = newEquivalences
+					this.ingredients[i].alternatives = newAlternatives
 					break
 				}
 			}

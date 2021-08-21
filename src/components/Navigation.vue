@@ -72,8 +72,8 @@ import { SidebarMenu } from 'vue-sidebar-menu'
                           icon: 'fa fa-plus',
                       },
                       {
-                          href: '/equivalences',
-                          title: 'Equivalent Ingredients',
+                          href: '/alternatives',
+                          title: 'Alternative Ingredients',
                           icon: 'fa fa-table',
                       },
 

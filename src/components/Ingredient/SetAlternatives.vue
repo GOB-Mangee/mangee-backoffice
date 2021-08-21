@@ -9,22 +9,22 @@
         </v-row>
 		<b-row no-gutters align-v="center">
 			<v-autocomplete class="mr-3"
-				v-model="newEquivalence"
+				v-model="newAlternative"
 				:items="ingredients"
 				color="white"
 				hide-no-data
 				hide-selected
 				item-text="name"
-				placeholder="Choose equivalences"
+				placeholder="Choose alternatives"
 				return-object
 			></v-autocomplete>
-			<b-button @click="addEquivalence">Add</b-button>
+			<b-button @click="addAlternative">Add</b-button>
         </b-row>
 		<v-row no-gutters class="d-flex justify-center">
 			<ul class="striped-list">
-				<li v-for="(ingredient, index) in newEquivalences" :key="ingredient.id">
+				<li v-for="(ingredient, index) in newAlternatives" :key="ingredient.id">
 					<span>{{ ingredient.name }}</span>
-					<button @click="removeEquivalence(index)" type="button" class="close ml-3" aria-label="Close">
+					<button @click="removeAlternative(index)" type="button" class="close ml-3" aria-label="Close">
 						<span style="color:red" aria-hidden="true">&times;</span>
 					</button>
 				</li>
@@ -40,7 +40,7 @@
 import axios from 'axios'
 
 export default {
-    name: "SetEquivalences",
+    name: "SetAlternatives",
     props : {
 		initialIngredient: {
 			type: Object,
@@ -57,8 +57,8 @@ export default {
             err: null,
             success: null,
 			ingredient: this.initialIngredient,
-			newEquivalences: this.initialIngredient.equivalences.slice(),
-			newEquivalence: null,
+			newAlternatives: this.initialIngredient.alternatives.slice(),
+			newAlternative: null,
         }
     },
 
@@ -71,17 +71,26 @@ export default {
             this.success = msg
             setTimeout(() => this.success = null, 3000);
         },
-        removeEquivalence(index){
-			this.newEquivalences.splice(index, 1)
+        removeAlternative(index){
+			this.newAlternatives.splice(index, 1)
 		},
-		addEquivalence(){
-			console.log(this.newEquivalence)
-			this.newEquivalences.push(this.newEquivalence)
-			this.newEquivalence = null
+		addAlternative(){
+			this.newAlternatives.push(this.newAlternative)
+			this.newAlternative = null
 		},
 		saveIngredient(){
-			//TODO call backend api
-			this.$emit('close', {paramList: [this.ingredient, this.newEquivalences]})
+			const data = {
+				ingredient: this.ingredient.id,
+				alternatives: this.newAlternatives.map(i => i.id)
+			}
+			axios.post(this.deploy_to + 'alternatives/update-ingredient/', data, {headers: {
+              'Authorization': `${this.$store.getters.getTokenToSend}`
+			}}).then(resp => {
+				this.$emit('close', {paramList: [this.ingredient, this.newAlternatives]})
+			}).catch(errors => {
+				console.log(errors)
+				this.showErr(errors)
+			})
 		}
     },
     created (){
